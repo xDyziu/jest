@@ -5,11 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-  // @ts-expect-error - added in Node 19.4.0
-  availableParallelism,
-  cpus,
-} from 'os';
+import {availableParallelism} from 'os';
 import * as path from 'path';
 import * as util from 'util';
 import chalk = require('chalk');
@@ -75,10 +71,7 @@ export async function run(
   };
 
   try {
-    const numCpus: number =
-      typeof availableParallelism === 'function'
-        ? availableParallelism()
-        : cpus().length;
+    const numCpus = availableParallelism();
 
     const hasteMap = await Runtime.createContext(projectConfig, {
       maxWorkers: Math.max(numCpus - 1, 1),
@@ -99,9 +92,9 @@ export async function run(
       },
       {console: customConsole, docblockPragmas: {}, testPath: filePath},
     );
-    setGlobal(environment.global, 'console', customConsole);
-    setGlobal(environment.global, 'jestProjectConfig', projectConfig);
-    setGlobal(environment.global, 'jestGlobalConfig', globalConfig);
+    setGlobal(environment.global, 'console', customConsole, 'retain');
+    setGlobal(environment.global, 'jestProjectConfig', projectConfig, 'retain');
+    setGlobal(environment.global, 'jestGlobalConfig', globalConfig, 'retain');
 
     const runtime = new Runtime(
       projectConfig,
