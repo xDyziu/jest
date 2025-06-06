@@ -2,7 +2,9 @@
 
 ### Features
 
+- `[expect]` Add `ArrayOf` asymmetric matcher for validating array elements. ([#15567](https://github.com/jestjs/jest/pull/15567))
 - `[babel-jest]` Add option `excludeJestPreset` to allow opting out of `babel-preset-jest` ([#15164](https://github.com/jestjs/jest/pull/15164))
+- `[expect]` Revert [#15038](https://github.com/jestjs/jest/pull/15038) to fix `expect(fn).toHaveBeenCalledWith(expect.objectContaining(...))` when there are multiple calls ([#15508](https://github.com/jestjs/jest/pull/15508))
 - `[jest-circus, jest-cli, jest-config]` Add `waitNextEventLoopTurnForUnhandledRejectionEvents` flag to minimise performance impact of correct detection of unhandled promise rejections introduced in [#14315](https://github.com/jestjs/jest/pull/14315) ([#14681](https://github.com/jestjs/jest/pull/14681))
 - `[jest-circus]` Add a `waitBeforeRetry` option to `jest.retryTimes` ([#14738](https://github.com/jestjs/jest/pull/14738))
 - `[jest-circus]` Add a `retryImmediately` option to `jest.retryTimes` ([#14696](https://github.com/jestjs/jest/pull/14696))
@@ -44,6 +46,7 @@
 - `[jest-runtime]` [**BREAKING**] Make it mandatory to pass `globalConfig` to the `Runtime` constructor ([#15044](https://github.com/jestjs/jest/pull/15044))
 - `[jest-runtime]` Add `unstable_unmockModule` ([#15080](https://github.com/jestjs/jest/pull/15080))
 - `[jest-runtime]` Add `onGenerateMock` transformer callback for auto generated callbacks ([#15433](https://github.com/jestjs/jest/pull/15433) & [#15482](https://github.com/jestjs/jest/pull/15482))
+- `[jest-runtime]` [**BREAKING**] Use `vm.compileFunction` over `vm.Script` ([#15461](https://github.com/jestjs/jest/pull/15461))
 - `[@jest/schemas]` Upgrade `@sinclair/typebox` to v0.34 ([#15450](https://github.com/jestjs/jest/pull/15450))
 - `[@jest/types]` `test.each()`: Accept a readonly (`as const`) table properly ([#14565](https://github.com/jestjs/jest/pull/14565))
 - `[@jest/types]` Improve argument type inference passed to `test` and `describe` callback functions from `each` tables ([#14920](https://github.com/jestjs/jest/pull/14920))
@@ -54,6 +57,7 @@
 
 ### Fixes
 
+- `[expect]` Show `AggregateError` to display ([#15346](https://github.com/facebook/jest/pull/15346))
 - `[*]` Replace `exit` with `exit-x` ([#15399](https://github.com/jestjs/jest/pull/15399))
 - `[babel-plugin-jest-hoist]` Use `denylist` instead of the deprecated `blacklist` for Babel 8 support ([#14109](https://github.com/jestjs/jest/pull/14109))
 - `[babel-plugin-jest-hoist]` Do not rely on buggy Babel behaviour ([#15415](https://github.com/jestjs/jest/pull/15415))
@@ -82,6 +86,7 @@
 - `[@jest/expect-utils]` Check `Symbol` properties in equality ([#14688](https://github.com/jestjs/jest/pull/14688))
 - `[@jest/expect-utils]` Catch circular references within arrays when matching objects ([#14894](https://github.com/jestjs/jest/pull/14894))
 - `[@jest/expect-utils]` Fix not addressing to Sets and Maps as objects without keys ([#14873](https://github.com/jestjs/jest/pull/14873))
+- `[jest-haste-map]` Fix errors or clobbering with multiple `hasteImplModulePath`s ([#15522](https://github.com/jestjs/jest/pull/15522))
 - `[jest-leak-detector]` Make leak-detector more aggressive when running GC ([#14526](https://github.com/jestjs/jest/pull/14526))
 - `[jest-runtime]` Properly handle re-exported native modules in ESM via CJS ([#14589](https://github.com/jestjs/jest/pull/14589))
 - `[jest-runtime]` Refactor `_importCoreModel` so required core module is consistent if modified while loading ([#15077](https://github.com/jestjs/jest/issues/15077))
@@ -97,18 +102,25 @@
 - `[jest-util]` Always load `mjs` files with `import` ([#15447](https://github.com/jestjs/jest/pull/15447))
 - `[jest-worker]` Properly handle a circular reference error when worker tries to send an assertion fails where either the expected or actual value is circular ([#15191](https://github.com/jestjs/jest/pull/15191))
 - `[jest-worker]` Properly handle a BigInt when worker tries to send an assertion fails where either the expected or actual value is BigInt ([#15191](https://github.com/jestjs/jest/pull/15191))
+- `[expect]` Resolve issue where `ObjectContaining` matched non-object values. ([#15463])(https://github.com/jestjs/jest/pull/15463).
+  - Adds a `conditional/check` to ensure the argument passed to `expect` is an object.
+  - Add unit tests for new `ObjectContaining` behavior.
+  - Remove `invalid/wrong` test case assertions for `ObjectContaining`.
+- `[jest-worker]` Addresses incorrect state on exit ([#15610](https://github.com/jestjs/jest/pull/15610))
 
 ### Performance
 
 - `[*]` [**BREAKING**] Bundle all of Jest's modules into `index.js` ([#12348](https://github.com/jestjs/jest/pull/12348), [#14550](https://github.com/jestjs/jest/pull/14550) & [#14661](https://github.com/jestjs/jest/pull/14661))
 - `[jest-haste-map]` Only spawn one process to check for `watchman` installation ([#14826](https://github.com/jestjs/jest/pull/14826))
 - `[jest-runner]` Better cleanup `source-map-support` after test to resolve (minor) memory leak ([#15233](https://github.com/jestjs/jest/pull/15233))
+- `[jest-circus, jest-environment-node, jest-repl, jest-runner, jest-util]` Cleanup global variables on environment teardown to reduce memory leaks ([#15215](https://github.com/jestjs/jest/pull/15215) & [#15636](https://github.com/jestjs/jest/pull/15636) & [#15643](https://github.com/jestjs/jest/pull/15643))
 
 ### Chore & Maintenance
 
+- `[jest-environment-jsdom, jest-environment-jsdom-abstract]` Increased version of jsdom to `^26.0.0` ([#15325](https://github.com/jestjs/jest/issues/15325)[CVE-2024-37890](https://nvd.nist.gov/vuln/detail/CVE-2024-37890))
 - `[*]` Increase version of `micromatch` to `^4.0.7` ([#15082](https://github.com/jestjs/jest/pull/15082))
-- `[*]` [**BREAKING**] Drop support for Node.js versions 14, 19 and 21 ([#14460](https://github.com/jestjs/jest/pull/14460), [#15118](https://github.com/jestjs/jest/pull/15118))
-- `[*]` [**BREAKING**] Drop support for `typescript@4.3`, minimum version is now `5.0` ([#14542](https://github.com/jestjs/jest/pull/14542))
+- `[*]` [**BREAKING**] Drop support for Node.js versions 14, 16, 19, 21 and 23 ([#14460](https://github.com/jestjs/jest/pull/14460), [#15118](https://github.com/jestjs/jest/pull/15118), [#15623](https://github.com/jestjs/jest/pull/15623), [#15640](https://github.com/jestjs/jest/pull/15640))
+- `[*]` [**BREAKING**] Drop support for `typescript@4.3`, minimum version is now `5.4` ([#14542](https://github.com/jestjs/jest/pull/14542), [#15621](https://github.com/jestjs/jest/pull/15621))
 - `[*]` Depend on exact versions of monorepo dependencies instead of `^` range ([#14553](https://github.com/jestjs/jest/pull/14553))
 - `[*]` [**BREAKING**] Add ESM wrapper for all of Jest's modules ([#14661](https://github.com/jestjs/jest/pull/14661))
 - `[*]` [**BREAKING**] Upgrade to `glob@10` ([#14509](https://github.com/jestjs/jest/pull/14509))
@@ -131,7 +143,7 @@
 - `[docs]` Link NestJS documentation on testing with Jest ([#14940](https://github.com/jestjs/jest/pull/14940))
 - `[docs]` `Revised documentation for .toHaveBeenCalled()` to accurately depict its functionality. ([#14853](https://github.com/jestjs/jest/pull/14853))
 - `[docs]` Removed ExpressJS reference link from documentation due to dead link ([#15270](https://github.com/jestjs/jest/pull/15270))
-- `[docs]` Removed `Running AngularJS Tests with Jest reference` link from documentation due to dead link ([#15270](https://github.com/jestjs/jest/pull/15311))
+- `[docs]` Correct broken links in docs ([#15359](https://github.com/jestjs/jest/pull/15359))
 
 ## 29.7.0
 
@@ -211,6 +223,7 @@
 
 ### Fixes
 
+- `[jest-runtime, jest-resolve]` Allow core modules to be mocked with the `node:` URL scheme ([#14297](https://github.com/jestjs/jest/pull/14297))
 - `[jest-circus]` Prevent false test failures caused by promise rejections handled asynchronously ([#14110](https://github.com/jestjs/jest/pull/14110))
 - `[jest-config]` Handle frozen config object ([#14054](https://github.com/facebook/jest/pull/14054))
 - `[jest-config]` Allow `coverageDirectory` and `collectCoverageFrom` in project config ([#14180](https://github.com/jestjs/jest/pull/14180))
@@ -223,6 +236,7 @@
 - `[jest-runtime]` Forward `wrapperLength` to the `Script` constructor as `columnOffset` for accurate debugging ([#14148](https://github.com/facebook/jest/pull/14148))
 - `[jest-runtime]` Guard `_isMockFunction` access with `in` ([#14188](https://github.com/facebook/jest/pull/14188))
 - `[jest-snapshot]` Fix a potential bug when not using prettier and improve performance ([#14036](https://github.com/facebook/jest/pull/14036))
+- `[jest-snapshot]` [**BREAKING**] Insert direct link to docs in snapshots instead of broken URL shortener ([#14081](https://github.com/facebook/jest/pull/14081))
 - `[@jest/transform]` Do not instrument `.json` modules ([#14048](https://github.com/facebook/jest/pull/14048))
 - `[jest-worker]` Restart a shut down worker before sending it a task ([#14015](https://github.com/facebook/jest/pull/14015))
 
