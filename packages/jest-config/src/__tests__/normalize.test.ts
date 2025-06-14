@@ -8,7 +8,7 @@
 
 import {createHash} from 'crypto';
 import * as path from 'path';
-import semver = require('semver');
+import * as semver from 'semver';
 import type {Config} from '@jest/types';
 import {escapeStrForRegex} from 'jest-regex-util';
 import Defaults from '../Defaults';
@@ -1142,9 +1142,8 @@ describe('preset', () => {
       {virtual: true},
     );
 
-    const errorMessage = semver.satisfies(process.versions.node, '<16.9.1')
-      ? /TypeError: Cannot read property 'call' of undefined[\S\s]* at /
-      : "TypeError: Cannot read properties of undefined (reading 'call')";
+    const errorMessage =
+      "TypeError: Cannot read properties of undefined (reading 'call')";
 
     await expect(
       normalize(

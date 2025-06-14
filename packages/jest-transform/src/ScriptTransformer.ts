@@ -11,10 +11,10 @@ import {transformSync as babelTransform} from '@babel/core';
 // @ts-expect-error: should just be `require.resolve`, but the tests mess that up
 import babelPluginIstanbul from 'babel-plugin-istanbul';
 import {fromSource as sourcemapFromSource} from 'convert-source-map';
-import stableStringify = require('fast-json-stable-stringify');
+import stableStringify from 'fast-json-stable-stringify';
 import * as fs from 'graceful-fs';
 import {addHook} from 'pirates';
-import slash = require('slash');
+import slash from 'slash';
 import {sync as writeFileAtomic} from 'write-file-atomic';
 import type {Config} from '@jest/types';
 import HasteMap from 'jest-haste-map';
@@ -939,7 +939,7 @@ const writeCacheFile = (cachePath: string, fileData: string) => {
     if (!(error instanceof Error)) {
       throw error;
     }
-    if (cacheWriteErrorSafeToIgnore(error, cachePath)) {
+    if (cacheWriteErrorSafeToIgnore(error)) {
       return;
     }
 
@@ -954,14 +954,11 @@ const writeCacheFile = (cachePath: string, fileData: string) => {
  * processes attempt to rename to the same target file at the same time.
  * If the target file exists we can be reasonably sure another process has
  * legitimately won a cache write race and ignore the error.
+ * If the target does not exist we do not know if it is because it is still
+ * being written by another process or is being overwritten by another process.
  */
-const cacheWriteErrorSafeToIgnore = (
-  e: NodeJS.ErrnoException,
-  cachePath: string,
-) =>
-  process.platform === 'win32' &&
-  e.code === 'EPERM' &&
-  fs.existsSync(cachePath);
+const cacheWriteErrorSafeToIgnore = (e: NodeJS.ErrnoException) =>
+  process.platform === 'win32' && e.code === 'EPERM';
 
 const readCacheFile = (cachePath: string): string | null => {
   if (!fs.existsSync(cachePath)) {

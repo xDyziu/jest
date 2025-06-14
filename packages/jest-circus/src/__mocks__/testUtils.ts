@@ -7,7 +7,7 @@
 
 import {sync as spawnSync} from 'execa';
 import * as fs from 'graceful-fs';
-import tempy = require('tempy');
+import tempy from 'tempy';
 
 const CIRCUS_PATH = require.resolve('../').replaceAll('\\', '\\\\');
 const CIRCUS_RUN_PATH = require.resolve('../run').replaceAll('\\', '\\\\');
@@ -36,7 +36,7 @@ export const runTest = (
     global.afterAll = circus.afterAll;
 
     const testEventHandler = require('${TEST_EVENT_HANDLER_PATH}').default;
-    const {addEventHandler, getState} = require('${CIRCUS_STATE_PATH}');
+    const {addEventHandler, removeEventHandler, getState} = require('${CIRCUS_STATE_PATH}');
     getState().randomize = ${opts?.randomize};
     getState().seed = ${opts?.seed ?? 0};
     addEventHandler(testEventHandler);

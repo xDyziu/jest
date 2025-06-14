@@ -6,15 +6,15 @@
  */
 
 import * as path from 'path';
-import chalk = require('chalk');
+import chalk from 'chalk';
 import * as fs from 'graceful-fs';
-import naturalCompare = require('natural-compare');
+import naturalCompare from 'natural-compare';
 import type {Config} from '@jest/types';
 import type {SnapshotData} from './types';
 
 export const SNAPSHOT_VERSION = '1';
 const SNAPSHOT_VERSION_REGEXP = /^\/\/ Jest Snapshot v(.+),/;
-export const SNAPSHOT_GUIDE_LINK = 'https://goo.gl/fbAQLP';
+export const SNAPSHOT_GUIDE_LINK = 'https://jestjs.io/docs/snapshot-testing';
 export const SNAPSHOT_VERSION_WARNING = chalk.yellow(
   `${chalk.bold('Warning')}: Before you upgrade snapshots, ` +
     'we recommend that you revert any local changes to tests or other code, ' +
