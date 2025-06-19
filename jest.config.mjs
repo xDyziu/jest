@@ -30,12 +30,16 @@ export default {
     'packages/jest-runtime/src/__tests__/test_root.*',
     'website/.*',
     'e2e/runtime-internal-module-registry/__mocks__',
+    'e2e/node-url-manual-mocks/__mocks__',
   ],
   projects: ['<rootDir>', '<rootDir>/examples/*/'],
   snapshotFormat: {
     printBasicPrototype: true,
   },
   snapshotSerializers: [require.resolve('jest-serializer-ansi-escapes')],
+  testEnvironmentOptions: {
+    globalsCleanup: process.env.GLOBALS_CLEANUP ?? 'on',
+  },
   testPathIgnorePatterns: [
     '/__arbitraries__/',
     '/__benchmarks__/',
@@ -57,7 +61,6 @@ export default {
     '/packages/jest-haste-map/src/__tests__/haste_impl.js',
     '/packages/jest-haste-map/src/__tests__/dependencyExtractor.js',
     '/packages/jest-haste-map/src/__tests__/test_dotfiles_root/',
-    '/packages/jest-repl/src/__tests__/test_root',
     '/packages/jest-runtime/src/__tests__/defaultResolver.js',
     '/packages/jest-runtime/src/__tests__/module_dir/',
     '/packages/jest-runtime/src/__tests__/NODE_PATH_dir',
